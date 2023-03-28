@@ -1,12 +1,12 @@
 package com.example.carbonenergy.ui.screens
 
-import android.widget.EditText
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import com.example.carbonenergy.model.User
 
 @Composable
 fun HomeScreen(carbonEnergyUiState: CarbonEnergyUiState, modifier: Modifier = Modifier) {
@@ -18,13 +18,12 @@ fun HomeScreen(carbonEnergyUiState: CarbonEnergyUiState, modifier: Modifier = Mo
 }
 
 @Composable
-fun ResultScreen(user: String, modifier: Modifier = Modifier) {
+fun ResultScreen(user: User, modifier: Modifier = Modifier) {
     Box(
         contentAlignment = Alignment.Center,
         modifier = modifier.fillMaxSize()
     ) {
-//         Text("[" + user.user_id +" " + user.energy + "]")
-        Text(user)
+         Text("Hi " + user.user_id + "\n" + "You have " + user.energy + " points!")
     }
 }
 
@@ -44,6 +43,6 @@ fun LoadingScreen(modifier: Modifier = Modifier) {
         contentAlignment = Alignment.Center,
         modifier = modifier.fillMaxSize()
     ) {
-        Text("Loading data...")
+        Text("Loading...")
     }
 }
