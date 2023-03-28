@@ -13,13 +13,13 @@ private const val BASE_URL = "http://10.0.0.70:8080/"
 
 // build HTTP client
 private val retrofit = Retrofit.Builder()
-    .addConverterFactory(ScalarsConverterFactory.create())
+    .addConverterFactory(Json.asConverterFactory(MediaType.get("application/json")))
     .baseUrl(BASE_URL)
     .build()
 
 interface CarbonEnergyApiService {
     @GET("carbon-energy/find-user/{id}")
-    suspend fun getUser(@Path("id") id: String): String
+    suspend fun getUser(@Path("id") id: String): User
 }
 
 // public api interface instance
