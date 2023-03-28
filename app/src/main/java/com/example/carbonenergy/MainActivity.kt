@@ -11,7 +11,7 @@ import com.example.carbonenergy.ui.theme.CarbonEnergyTheme
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.login)
         val userId = findViewById<EditText>(R.id.textUserID)
         val submitButton = findViewById<Button>(R.id.buttonSubmit)
         submitButton.setOnClickListener {
