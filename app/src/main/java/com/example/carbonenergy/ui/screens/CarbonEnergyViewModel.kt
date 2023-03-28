@@ -8,11 +8,13 @@ import androidx.lifecycle.viewModelScope
 import com.example.carbonenergy.model.User
 import com.example.carbonenergy.network.CarbonEnergyApi
 import kotlinx.coroutines.launch
+import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.json.Json
 import retrofit2.HttpException
 import java.io.IOException
 
 sealed interface CarbonEnergyUiState {
-    data class Success(val user: String) : CarbonEnergyUiState
+    data class Success(val user: User) : CarbonEnergyUiState
     object Error : CarbonEnergyUiState
     object Loading : CarbonEnergyUiState
 }
