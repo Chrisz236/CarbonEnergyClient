@@ -5,7 +5,9 @@ import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFact
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType
 import retrofit2.Retrofit
+import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.POST
 import retrofit2.http.Path
 
 private const val BASE_URL = "http://10.0.0.70:8080/"
@@ -19,6 +21,9 @@ private val retrofit = Retrofit.Builder()
 interface CarbonEnergyApiService {
     @GET("carbon-energy/find-user/{id}")
     suspend fun getUser(@Path("id") id: String): User
+
+    @POST("carbon-energy/save-user")
+    suspend fun updateUser(@Body user: User)
 }
 
 // public api interface instance
