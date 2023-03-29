@@ -1,6 +1,5 @@
 package com.example.carbonenergy.network
 
-import retrofit2.converter.scalars.ScalarsConverterFactory
 import com.example.carbonenergy.model.User
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import kotlinx.serialization.json.Json
