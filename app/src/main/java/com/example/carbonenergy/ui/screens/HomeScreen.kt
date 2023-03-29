@@ -23,7 +23,7 @@ fun ResultScreen(user: User, modifier: Modifier = Modifier) {
         contentAlignment = Alignment.Center,
         modifier = modifier.fillMaxSize()
     ) {
-         Text("Hi " + user.user_id + "\n" + "You have " + user.energy + " points!")
+        Text("Hi " + user.user_id + "\n" + "You have " + user.energy + " points!")
     }
 }
 
