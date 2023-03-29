@@ -11,7 +11,7 @@ import com.example.carbonenergy.ui.screens.CarbonEnergyViewModel
 import com.example.carbonenergy.ui.screens.HomeScreen
 
 @Composable
-fun CarbonEnergyApp(id: EditText, modifier: Modifier = Modifier) {
+fun CarbonEnergyApp(id: String, modifier: Modifier = Modifier) {
     Scaffold(
         modifier = modifier.fillMaxSize(),
     ) {
@@ -22,7 +22,7 @@ fun CarbonEnergyApp(id: EditText, modifier: Modifier = Modifier) {
             color = MaterialTheme.colors.background
         ) {
             val carbonEnergyViewModel: CarbonEnergyViewModel = viewModel()
-            carbonEnergyViewModel.setUserId(id.text.toString())
+            carbonEnergyViewModel.setUserId(id)
             HomeScreen(carbonEnergyViewModel.carbonEnergyUiState)
         }
     }
