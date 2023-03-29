@@ -15,7 +15,7 @@ class Home : AppCompatActivity() {
     @SuppressLint("SetTextI18n", "MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.menu)
+        setContentView(R.layout.home)
         intent = getIntent()
 
         val userId = intent.getStringExtra("user_id").toString()
