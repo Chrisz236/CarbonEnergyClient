@@ -22,9 +22,13 @@ class MainActivity : AppCompatActivity() {
         val userId = findViewById<EditText>(R.id.textUserID)
         val submitButton = findViewById<Button>(R.id.buttonSubmit)
         submitButton.setOnClickListener {
-            var intent = Intent(this, Home::class.java)
-            intent.putExtra("user_id", userId.text.toString())
-            startActivity(intent)
+            if(userId.text.toString().isNotEmpty() || userId.text.toString().isNotBlank()) {
+                var intent = Intent(this, Home::class.java)
+                intent.putExtra("user_id", userId.text.toString())
+                startActivity(intent)
+            } else {
+                Toast.makeText(applicationContext, "Please enter your carbon ID", Toast.LENGTH_SHORT)
+            }
         }
     }
 }
