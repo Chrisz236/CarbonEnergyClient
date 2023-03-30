@@ -28,6 +28,7 @@
         android:layout_marginTop="48dp"
         android:layout_marginEnd="160dp"
         android:text="Let's go"
+        android:backgroundTint="#A2CB8B"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textUserID" />
