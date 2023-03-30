@@ -2,7 +2,6 @@ package com.example.carbonenergy
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.content.SharedPreferences
 import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
@@ -25,6 +24,8 @@ class Home : AppCompatActivity(), SensorEventListener {
     var totalSteps = 0f
     var previousTotalSteps = 0f
 
+    var user = User("TEST USER", 100000, 6)
+
     @SuppressLint("SetTextI18n", "MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,9 +33,8 @@ class Home : AppCompatActivity(), SensorEventListener {
 
         intent = getIntent()
         val userId = intent.getStringExtra("user_id").toString()
-        var user = User("TEST USER", 100000, 6)
 
-        // network activity to update user data
+        // init user object from server
         runBlocking {
             val job = launch {
                 user = CarbonEnergyApi.retrofitService.getUser(userId)
@@ -49,36 +49,10 @@ class Home : AppCompatActivity(), SensorEventListener {
                 "You have ${user.treesPlanted} trees planted.")
 
         loadData()
-        collectSteps(user, title)
+        collectSteps(title)
         sensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
 
-        val steps = findViewById<EditText>(R.id.textSteps)
-        val btnSubmitSteps = findViewById<Button>(R.id.btnSubmitStep)
         val btnPlantTree = findViewById<Button>(R.id.btnPlantTree)
-
-        btnSubmitSteps.setOnClickListener {
-            if(steps.text.toString().isNotBlank() || steps.text.toString().isNotEmpty()) {
-                // every 200 step convert to 1 energy
-                val newEnergy = (steps.text.toString().toFloat() / 200.0).toInt()
-                user = user.copy(energy = user.energy + newEnergy)
-
-                // network activity to update user data
-                runBlocking {
-                    val job = launch {
-                        CarbonEnergyApi.retrofitService.updateUser(user)
-                    }
-                    job.join()
-                }
-
-                title.setText("Hello, ${user.userId}\n" +
-                        "You have ${user.energy} points.\n" +
-                        "You have ${user.treesPlanted} trees planted.")
-
-                Toast.makeText(this, "You earned $newEnergy points", Toast.LENGTH_SHORT).show()
-            } else {
-                Toast.makeText(this, "Invalid input", Toast.LENGTH_SHORT).show()
-            }
-        }
 
         btnPlantTree.setOnClickListener {
             if(user.energy < 10000) {
@@ -123,7 +97,6 @@ class Home : AppCompatActivity(), SensorEventListener {
 
     @SuppressLint("SetTextI18n")
     override fun onSensorChanged(event: SensorEvent?) {
-        Toast.makeText(this, "sensor changed", Toast.LENGTH_LONG).show()
         if(running) {
             totalSteps = event!!.values[0]
             val currentSteps = totalSteps.toInt() - previousTotalSteps.toInt()
@@ -132,16 +105,16 @@ class Home : AppCompatActivity(), SensorEventListener {
     }
 
     @SuppressLint("SetTextI18n")
-    private fun collectSteps(user: User, title: TextView) {
+    private fun collectSteps(title: TextView) {
         findViewById<TextView>(R.id.textStepValue).setOnClickListener {
             val netSteps = totalSteps - previousTotalSteps
             val newEnergy = (netSteps / 200.0).toInt()
-            val updatedUser = user.copy(energy = user.energy + newEnergy)
+            user = user.copy(energy = user.energy + newEnergy)
 
             // network activity to update user data
             runBlocking {
                 val job = launch {
-                    CarbonEnergyApi.retrofitService.updateUser(updatedUser)
+                    CarbonEnergyApi.retrofitService.updateUser(user)
                 }
                 job.join()
             }
@@ -153,22 +126,21 @@ class Home : AppCompatActivity(), SensorEventListener {
             Toast.makeText(this, "You earned $newEnergy points", Toast.LENGTH_SHORT).show()
 
             previousTotalSteps = totalSteps
-
             findViewById<TextView>(R.id.textStepValue).text = 0.toString()
             saveData()
-            Toast.makeText(this, "You just collect your energy", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "You just collected your energy", Toast.LENGTH_SHORT).show()
         }
     }
 
     private fun saveData() {
-        val sharedPreferences = getSharedPreferences ( "myPrefs", Context.MODE_PRIVATE)
+        val sharedPreferences = getSharedPreferences( "myPrefs", Context.MODE_PRIVATE)
         val editor = sharedPreferences.edit()
         editor.putFloat ("savedSteps", previousTotalSteps)
         editor.apply()
     }
 
     private fun loadData() {
-        val sharedPreferences = getSharedPreferences ( "myPrefs", Context.MODE_PRIVATE)
+        val sharedPreferences = getSharedPreferences( "myPrefs", Context.MODE_PRIVATE)
         val savedNumber = sharedPreferences.getFloat("savedSteps", 0f)
         previousTotalSteps = savedNumber
     }
